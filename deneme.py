@@ -77,7 +77,7 @@ def geneticAlgorithm(gen,tasks):
 shiftTime = 3
 tasks = [task(id=i) for i in range(100)]
 maxFitness = findMaxFitness(tasks)
-firstGen = [random.sample(range(0, 100), 100) for i in range(100)]
+firstGen = [random.sample(range(0, 500), 500) for i in range(100)]
 print("Maksimum fitness değeri: ", maxFitness)
 result = geneticAlgorithm(firstGen,tasks)
 print("En iyi fitness: ", result[0])
