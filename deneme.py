@@ -1,5 +1,7 @@
 import random
 import matplotlib.pyplot as plt
+import operator
+
 
 class window:
     #görünürlük pencerelerinin sınıfı
@@ -22,6 +24,21 @@ def findMaxFitness(tasks):
         sum = tasks[i].priorty+sum
     return sum
 
+def satelliteConflicts(tasks,task, chromosome, servedTasks):
+    isConflict = False
+    conflictIndex = -1
+    for i in range(100):
+        if (tasks[chromosome[i]].satId == task.satId):
+            if (tasks[chromosome[i]].id == task.id):
+                continue
+            if (servedTasks[i] == 0):
+                continue
+            if (task.visibilityWindow.end < tasks[chromosome[i]].visibilityWindow.start):
+                if (tasks[chromosome[i]].visibilityWindow.end > task.visibilityWindow.start):
+                    isConflict = True
+                    conflictIndex = i
+                    break
+    return isConflict, conflictIndex
 def groundStationConflicts(tasks, task, chromosome, servedTasks):
     isConflict = False
     conflictIndex = -1
@@ -39,6 +56,14 @@ def groundStationConflicts(tasks, task, chromosome, servedTasks):
     return isConflict, conflictIndex
 def checkConflicts(chromosome, tasks):
     servedTasks = [1 for i in range(100)]
+    for i in range(100):
+        if(servedTasks[i] == 1):
+            isConflict = satelliteConflicts(tasks, tasks[chromosome[i]], chromosome, servedTasks)
+            if(isConflict[0]):
+                if(tasks[chromosome[i]].priorty > tasks[chromosome[isConflict[1]]].priorty):
+                    servedTasks[i] = 0
+                else:
+                    servedTasks[isConflict[1]] = 0
     for i in range(100):
         if(servedTasks[i] == 1):
             isConflict = groundStationConflicts(tasks, tasks[chromosome[i]], chromosome, servedTasks)
@@ -85,6 +110,7 @@ firstPopulation = [random.sample(range(0, 200), 100) for i in range(100)]
 print("Maksimum fitness değeri: ", maxFitness)
 result = geneticAlgorithm(firstPopulation,tasks)
 print("En iyi fitness: ", result[0])
+print("Hizmet verilen görev sayısı: ", operator.countOf(result[2],1))
 print("Sıralanmış görevler: ", result[1])
 print("Görevlerin hizmet durumu: ", result[2])
 
