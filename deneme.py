@@ -95,18 +95,14 @@ for i in range(100):
 # plotting the points
     plt.plot(x, y)
 
-plt.yticks(list(range(0,30)))
-
+plt.yticks(list(range(0,31)))
 # naming the x axis
 plt.xlabel('Zaman(dk)')
 # naming the y axis
 plt.ylabel('Uydu')
 
-
-
 # giving a title to my graph
 plt.title('Hizmet Verilen Görevler')
-
 
 # function to show the plot
 plt.show()
